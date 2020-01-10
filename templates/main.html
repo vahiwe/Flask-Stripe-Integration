@@ -19,17 +19,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='intlTelInput.css')}}">
     <!-- Favicons -->
-    <link rel="apple-touch-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/apple-touch-icon.png"
-        sizes="180x180">
-    <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon-32x32.png" sizes="32x32"
-        type="image/png">
-    <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon-16x16.png" sizes="16x16"
-        type="image/png">
-    <link rel="manifest" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/manifest.json">
-    <link rel="mask-icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/safari-pinned-tab.svg"
-        color="#563d7c">
-    <link rel="icon" href="https://getbootstrap.com/docs/4.4/assets/img/favicons/favicon.ico">
-    <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
+    <link rel="icon" href="{{ url_for('static', filename='afriex-new-logo-2.png')}}">
     <meta name="theme-color" content="#563d7c">
 
     <style>
@@ -140,15 +130,15 @@
                         <div class="col-md-6 mb-3">
                             <label for="firstName">First name</label>
                             <input type="text" class="form-control" id="firstName" placeholder="" name="first_name"
-                                value="" required="">
+                                value="{{ request.form['first_name'] }}" required="">
                             <div class="invalid-feedback">
                                 Valid first name is required.
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="lastName">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" value=""
-                                name="last_name" required="">
+                            <input type="text" class="form-control" id="lastName" placeholder=""
+                                value="{{ request.form['last_name'] }}" name="last_name" required="">
                             <div class="invalid-feedback">
                                 Valid last name is required.
                             </div>
@@ -171,7 +161,7 @@
                     <div class="mb-3">
                         <label for="email">Email</label>
                         <input type="email" class="form-control" id="email" placeholder="you@example.com" name="email"
-                            required="">
+                            required="" value="{{ request.form['email'] }}">
                         <div class="invalid-feedback">
                             Please enter a valid email address.
                         </div>
@@ -193,7 +183,8 @@
                     <div class="mb-3">
                         <!-- <div class="col-md-5 mb-3"> -->
                         <label for="country">Country</label>
-                        <select class="custom-select d-block w-100" id="country" name="country" required="">
+                        <select class="custom-select d-block w-100" id="country" name="country" required=""
+                            value="{{ request.form['country'] }}">
                             <option value="">Choose...</option>
                             <option value="au">Australia</option>
                             <option value="at">Austria</option>
@@ -251,8 +242,8 @@
 
                     <div class="mb-3">
                         <label for="phone">Mobile Number</label><br>
-                        <input type="tel" class="form-control" id="phone" placeholder="" name="phone" required=""><span
-                            id="valid-msg" class="hide">✓ Valid</span>
+                        <input type="tel" class="form-control" id="phone" placeholder="" name="phone" required=""
+                            value="{{ request.form['phone'] }}"><span id="valid-msg" class="hide">✓ Valid</span>
                         <span id="error-msg" class="hide"></span>
                         <div class="invalid-feedback">
                             Please enter a valid mobile number.
@@ -267,7 +258,7 @@
                     <div class="mb-3">
                         <label for="phone">Product Description</label>
                         <textarea type="text" class="form-control" id="description" placeholder="" name="describe"
-                            required="" rows="3"></textarea>
+                            required="" rows="3" value="{{ request.form['describe'] }}"></textarea>
                         <div class="invalid-feedback">
                             Please enter a description of your business.
                         </div>
@@ -316,7 +307,7 @@
                         <div class="col-md-9 mb-3">
                             <label for="cc-number">Credit card number</label>
                             <input type="text" class="form-control" id="cc-number" placeholder="" name="cc_number"
-                                required="" minlength="16">
+                                required="" minlength="16" value="{{ request.form['cc_number'] }}">
                             <div class="invalid-feedback">
                                 Credit card number is required
                             </div>
@@ -336,7 +327,8 @@
                         <div class="col-md-3 mb-3">
                             <label for="cc-expiration">Expiration</label>
                             <input type="text" class="form-control" id="cc-expiration" placeholder="MM / YY"
-                                name="cc_expire" required="" minlength="7" maxlength="7">
+                                name="cc_expire" required="" minlength="7" maxlength="7"
+                                value="{{ request.form['cc_expire'] }}">
                             <div class="invalid-feedback">
                                 Expiration date required
                             </div>
