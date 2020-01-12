@@ -129,7 +129,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="firstName">First name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" name="first_name"
+                            <input type="text" class="form-control" id="firstName" placeholder="John" name="first_name"
                                 value="{{ request.form['first_name'] }}" required="">
                             <div class="invalid-feedback">
                                 Valid first name is required.
@@ -137,7 +137,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="lastName">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder=""
+                            <input type="text" class="form-control" id="lastName" placeholder="Doe"
                                 value="{{ request.form['last_name'] }}" name="last_name" required="">
                             <div class="invalid-feedback">
                                 Valid last name is required.
@@ -257,13 +257,26 @@
 
                     <div class="mb-3">
                         <label for="phone">Product Description</label>
-                        <textarea type="text" class="form-control" id="description" placeholder="" name="describe"
-                            required="" rows="3" value="{{ request.form['describe'] }}"></textarea>
+                        <textarea type="text" class="form-control" id="description" placeholder="Describe"
+                            name="describe" required="" rows="3">{{ request.form['describe'] }}</textarea>
                         <div class="invalid-feedback">
                             Please enter a description of your business.
                         </div>
                     </div>
 
+                    <hr class="mb-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <button class="btn btn-outline-primary btn-lg btn-block" id="change_to_card"
+                                type="button">Debit
+                                Card</button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button class="btn btn-outline-primary btn-lg btn-block" id="change_to_bank"
+                                type="button">Bank
+                                information</button>
+                        </div>
+                    </div>
                     <hr class="mb-4">
                     <!-- <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="same-address">
@@ -295,66 +308,185 @@
                             <label class="custom-control-label" for="paypal">PayPal</label>
                         </div>
                     </div> -->
-                    <div class="row">
-                        <!-- <div class="col-md-6 mb-3"> -->
-                        <!-- <label for="cc-name">Name on card</label>
+                    <div id="card_details" {% if bank_usage %} style="display: none;" {% endif %}>
+                        <div class="row">
+                            <!-- <div class="col-md-6 mb-3"> -->
+                            <!-- <label for="cc-name">Name on card</label>
                             <input type="text" class="form-control" id="cc-name" placeholder="" required="">
                             <small class="text-muted">Full name as displayed on card</small>
                             <div class="invalid-feedback">
                                 Name on card is required
                             </div>
                         </div> -->
-                        <div class="col-md-9 mb-3">
-                            <label for="cc-number">Credit card number</label>
-                            <input type="text" class="form-control" id="cc-number" placeholder="" name="cc_number"
-                                required="" minlength="16" value="{{ request.form['cc_number'] }}">
-                            <div class="invalid-feedback">
-                                Credit card number is required
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-number">Debit card number</label>
+                                <input type="text" class="form-control" id="cc-number" placeholder="1234 5678 9087 4321"
+                                    name="cc_number" {% if not bank_usage %} required="" {% endif %} minlength="16"
+                                    value="{{ request.form['cc_number'] }}">
+                                <div class="invalid-feedback">
+                                    Dedit card number is required
+                                </div>
+                                {% if cc_number_digit %}
+                                <div style="color: red;">
+                                    Please enter a valid dedit card number.
+                                </div>
+                                {% endif %}
+                                {% if cc_number_length %}
+                                <div style="color: red;">
+                                    Please enter a valid dedit card number.
+                                </div>
+                                {% endif %}
+                                {% if not_debit_card %}
+                                <div style="color: red;">
+                                    This card doesn't appear to be a debit card.
+                                </div>
+                                {% endif %}
+                                <!-- </div> -->
                             </div>
-                            {% if cc_number_digit %}
-                            <div style="color: red;">
-                                Please enter a valid credit card number.
+                            <!-- <div class="row"> -->
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">Expiration</label>
+                                <input type="text" class="form-control" id="cc-expiration" placeholder="MM / YY"
+                                    name="cc_expire" {% if not bank_usage %} required="" {% endif %} minlength="7"
+                                    maxlength="7" value="{{ request.form['cc_expire'] }}">
+                                <div class="invalid-feedback">
+                                    Expiration date required
+                                </div>
+                                {% if demarcate_not_present %}
+                                <div style="color: red;">
+                                    Please input the right format.
+                                </div>
+                                {% endif %}
+                                {% if expire_wrong_format %}
+                                <div style="color: red;">
+                                    The expiration date format is MM / YY.
+                                </div>
+                                {% endif %}
+                                {% if cc_expire_digit %}
+                                <div style="color: red;">
+                                    Please input the right format.
+                                </div>
+                                {% endif %}
+                                {% if not_debit_card %}
+                                <div style="color: red;">
+                                    This card doesn't appear to be a debit card.
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                            {% if cc_number_length %}
-                            <div style="color: red;">
-                                Please enter a valid credit card number.
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-cvv">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvv" placeholder="456"
+                                    {% if not bank_usage %} required="" {% endif %} name="cc_cvv"
+                                    value="{{ request.form['cc_cvv'] }}">
+                                <div class="invalid-feedback">
+                                    CVV required
+                                </div>
+                                {% if cc_cvv_digit %}
+                                <div style="color: red;">
+                                    Please input the right format.
+                                </div>
+                                {% endif %}
+                                {% if cc_cvv_length %}
+                                <div style="color: red;">
+                                    Please enter 3 or 4 digit number.
+                                </div>
+                                {% endif %}
+                                {% if not_debit_card %}
+                                <div style="color: red;">
+                                    This card doesn't appear to be a debit card.
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                            <!-- </div> -->
                         </div>
-                        <!-- <div class="row"> -->
-                        <div class="col-md-3 mb-3">
-                            <label for="cc-expiration">Expiration</label>
-                            <input type="text" class="form-control" id="cc-expiration" placeholder="MM / YY"
-                                name="cc_expire" required="" minlength="7" maxlength="7"
-                                value="{{ request.form['cc_expire'] }}">
+                    </div>
+
+                    <div id="bank_details" {% if bank_usage %} style="" {% else %} style="display: none;" {% endif %}>
+                        <div class="mb-3">
+                            <label for="routing_number">Routing Number</label>
+                            <input type="text" class="form-control" id="routing_number" placeholder="110000000"
+                                name="routing_number" value="{{ request.form['routing_number'] }}" maxlength="9"
+                                minlength="9" {% if bank_usage %} required="" {% endif %}>
                             <div class="invalid-feedback">
-                                Expiration date required
+                                Please enter your Bank account Routing Number.
                             </div>
-                            {% if demarcate_not_present %}
+                            {% if routing_number_digit %}
                             <div style="color: red;">
-                                Please input the right format.
-                            </div>
-                            {% endif %}
-                            {% if expire_wrong_format %}
-                            <div style="color: red;">
-                                The expiration date format is MM / YY.
+                                Please enter a valid routing number.
                             </div>
                             {% endif %}
-                            {% if cc_expire_digit %}
+                            {% if routing_number_length %}
                             <div style="color: red;">
-                                Please input the right format.
+                                Please enter an 8 digit routing number.
+                            </div>
+                            {% endif %}
+                            {% if not_bank_account %}
+                            <div style="color: red;">
+                                This doesn't appear to be a bank account.
                             </div>
                             {% endif %}
                         </div>
-                        <!-- <div class="col-md-3 mb-3">
-                            <label for="cc-cvv">CVV</label>
-                            <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+
+                        <div class="mb-3">
+                            <label for="acc_number">Account Number</label>
+                            <input type="text" class="form-control" id="acc_number" placeholder="000123456789"
+                                name="acc_number" value="{{ request.form['acc_number'] }}" maxlength="12" minlength="12"
+                                {% if bank_usage %} required="" {% endif %}>
+                            <small>Your bank account must be a checking account.</small>
                             <div class="invalid-feedback">
-                                Security code required
+                                Please enter a valid account number.
                             </div>
-                        </div> -->
+                            {% if acc_number_unmatch %}
+                            <div style="color: red;">
+                                Account numbers do not match.
+                            </div>
+                            {% endif %}
+                            {% if acc_number_digit %}
+                            <div style="color: red;">
+                                Please enter a valid account number.
+                            </div>
+                            {% endif %}
+                            {% if acc_number_length %}
+                            <div style="color: red;">
+                                Please enter a 12 digit account number.
+                            </div>
+                            {% endif %}
+                            {% if not_bank_account %}
+                            <div style="color: red;">
+                                This doesn't appear to be a bank account.
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="acc_number_confirm">Confirm Account Number</label>
+                            <input type="text" class="form-control" id="acc_number_confirm" placeholder="000123456789"
+                                name="acc_number_confirm" value="{{ request.form['acc_number_confirm'] }}"
+                                maxlength="12" minlength="12" {% if bank_usage %} required="" {% endif %}>
+                            <small>Your bank account must be a checking account.</small>
+                            <div class="invalid-feedback">
+                                Please enter a valid account number.
+                            </div>
+                            {% if acc_number_unmatch %}
+                            <div style="color: red;">
+                                Account numbers do not match.
+                            </div>
+                            {% endif %}
+                            {% if acc_number_digit %}
+                            <div style="color: red;">
+                                Please enter a valid account number.
+                            </div>
+                            {% endif %}
+                            {% if acc_number_length %}
+                            <div style="color: red;">
+                                Please enter a 12 digit account number.
+                            </div>
+                            {% endif %}
+                            {% if not_bank_account %}
+                            <div style="color: red;">
+                                This doesn't appear to be a bank account.
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                     <hr class="mb-4">
                     <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
@@ -384,6 +516,36 @@
     <script src="{{ url_for('static', filename='intlTelInput.js')}}"></script>
     <script src="{{ url_for('static', filename='payment.js')}}"></script>
     <script>
+        $(document).ready(function () {
+            $("#change_to_bank").click(function () {
+                $("#card_details").hide();
+                $('#cc-number').attr('required', false);
+                $('#cc-cvv').attr('required', false);
+                $('#cc-expiration').attr('required', false);
+                $('#cc-number').val('');
+                $('#cc-cvv').val('');
+                $('#cc-expiration').val('');
+                // $('#edit-submitted-first-name').removeAttr('required');
+                $("#bank_details").show();
+                $('#routing_number').attr('required', true);
+                $('#acc_number').attr('required', true);
+                $('#acc_number_confirm').attr('required', true);
+            });
+            $("#change_to_card").click(function () {
+                $("#bank_details").hide();
+                $('routing_number').attr('required', false);
+                $('#acc_number').attr('required', false);
+                $('#acc_number_confirm').attr('required', false);
+                $('#routing_number').val('');
+                $('#acc_number').val('');
+                $('#acc_number_confirm').val('');
+                // $('#edit-submitted-first-name').removeAttr('required');
+                $("#card_details").show();
+                $('#cc-number').attr('required', true);
+                $('#cc-cvv').attr('required', true);
+                $('#cc-expiration').attr('required', true);
+            });
+        });
         // get the country data from the plugin
         var countryData = window.intlTelInputGlobals.getCountryData(),
             input = document.querySelector("#phone"),
@@ -427,6 +589,7 @@
         var J = Payment.J,
             // numeric = document.querySelector('[data-numeric]'),
             number = document.querySelector('#cc-number'),
+            cvv = document.querySelector('#cc-cvv'),
             exp = document.querySelector('#cc-expiration');
         // cvc = document.querySelector('.cc-cvc'),
         // validation = document.querySelector('.validation');
@@ -434,7 +597,11 @@
         // Payment.restrictNumeric(numeric);
         Payment.formatCardNumber(number, 16);
         Payment.formatCardExpiry(exp);
+        Payment.formatCardCVC(cvv);
         Payment.restrictNumeric(document.querySelector('#phone'));
+        Payment.restrictNumeric(document.querySelector('#routing_number'));
+        Payment.restrictNumeric(document.querySelector('#acc_number'));
+        Payment.restrictNumeric(document.querySelector('#acc_number_confirm'));
         // Payment.formatCardCVC(cvc);
 
         var reset = function () {
