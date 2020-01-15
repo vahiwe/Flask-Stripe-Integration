@@ -71,6 +71,9 @@
             <p>Get paid by Afriex Inc.</p>
             <p class="lead">Afriex Inc. partners with Stripe for fast, secure payments. Fill out a few details so you
                 can start getting paid.</p>
+            {% if error_valid %}
+            <p style="color: red;">Please fix errors.</p>
+            {% endif %}
         </div>
 
         <div class="row justify-content-center">
@@ -319,7 +322,7 @@
                             </div>
                         </div> -->
                             <div class="col-md-6 mb-3">
-                                <label for="cc-number">Debit card number</label>
+                                <label for="cc-number">Card number (debit only)</label>
                                 <input type="text" class="form-control" id="cc-number" placeholder="1234 5678 9087 4321"
                                     name="cc_number" {% if not bank_usage %} required="" {% endif %} minlength="16"
                                     value="{{ request.form['cc_number'] }}">
