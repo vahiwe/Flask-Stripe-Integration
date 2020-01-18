@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='afriex-new-logo-2.png')}}" alt=""
+            width="72" height="72">
+        <h2>Afriex Inc.</h2>
+        <p>Get paid by Afriex Inc.</p>
+        <p class="bold" style="size: 20px;">Please choose your mode of payment.</p>
+        {% if error_valid %}
+        <p style="color: red;">Please fix errors.</p>
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('index') }}"><button class="btn btn-outline-primary btn-lg btn-block"
+                    id="change_to_card" type="button">Debit
+                    Card</button></a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <button class="btn btn-outline-primary btn-lg btn-block" id="change_to_bank" type="button">Bank
+                information</button>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="display: none;" id="loader">
+        <img src="{{ url_for('static', filename='ajax-loader.gif')}}" , width="20px" height="20px">
+    </div>
+</div>
+
+<footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">© 2019 Afriex</p>
+    <!-- <ul class="list-inline">
+      <li class="list-inline-item"><a href="https://getbootstrap.com/docs/4.4/examples/checkout/#">Privacy</a></li>
+      <li class="list-inline-item"><a href="https://getbootstrap.com/docs/4.4/examples/checkout/#">Terms</a></li>
+      <li class="list-inline-item"><a href="https://getbootstrap.com/docs/4.4/examples/checkout/#">Support</a></li>
+    </ul> -->
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+<script>
+    var linkHandler = Plaid.create({
+        env: 'sandbox',
+        clientName: 'Afriex',
+        key: '{{PLAID_PUBLIC_KEY}}',
+        product: ['auth'],
+        selectAccount: true,
+        onSuccess: function (public_token, metadata) {
+            var $target = $('html,body');
+            $target.animate({
+                scrollTop: $target.height()
+            }, 1000);
+            $("#change_to_bank").hide();
+            $("#change_to_card").hide();
+            $("#loader").show();
+            // Send the public_token and account ID to your app server.
+            $.post('/get_bank_info', {
+                public_token: public_token,
+                account_id: metadata.account_id
+            }, function (data) {
+                window.location = data.redirect;
+            });
+            console.log('public_token: ' + public_token);
+            console.log('account ID: ' + metadata.account_id);
+        },
+        onExit: function (err, metadata) {
+            // The user exited the Link flow.
+            if (err != null) {
+                // The user encountered a Plaid API error prior to exiting.
+            }
+        },
+    });
+
+    // Trigger the Link UI
+    document.getElementById('change_to_bank').onclick = function () {
+        linkHandler.open();
+    };
+</script>
+{% endblock %}

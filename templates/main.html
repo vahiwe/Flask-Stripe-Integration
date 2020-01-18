@@ -14,8 +14,7 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/checkout/">
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='intlTelInput.css')}}">
     <!-- Favicons -->
@@ -266,9 +265,8 @@
                             Please enter a description of your business.
                         </div>
                     </div>
-
                     <hr class="mb-4">
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-6 mb-3">
                             <button class="btn btn-outline-primary btn-lg btn-block" id="change_to_card"
                                 type="button">Debit
@@ -280,7 +278,7 @@
                                 information</button>
                         </div>
                     </div>
-                    <hr class="mb-4">
+                    <hr class="mb-4"> -->
                     <!-- <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="same-address">
                         <label class="custom-control-label" for="same-address">Shipping address is the same as my
@@ -403,7 +401,7 @@
                         </div>
                     </div>
 
-                    <div id="bank_details" {% if bank_usage %} style="" {% else %} style="display: none;" {% endif %}>
+                    <!-- <div id="bank_details" {% if bank_usage %} style="" {% else %} style="display: none;" {% endif %}>
                         <div class="mb-3">
                             <label for="routing_number">Routing Number</label>
                             <input type="text" class="form-control" id="routing_number" placeholder="110000000"
@@ -490,9 +488,9 @@
                             </div>
                             {% endif %}
                         </div>
-                    </div>
+                    </div> -->
                     <hr class="mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit" id="final">Submit</button>
                 </form>
             </div>
         </div>
@@ -506,49 +504,48 @@
     </ul> -->
         </footer>
     </div>
-    <script src="{{ url_for('static', filename='jquery-3.4.1.slim.min.js.download')}}"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-    </script>
+    <!-- <script src="{{ url_for('static', filename='jquery-3.4.1.slim.min.js.download')}}" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script>
         window.jQuery || document.write('<script src="/docs/4.4/assets/js/vendor/jquery.slim.min.js"><\/script>')
     </script>
-    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js.download')}}"
-        integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous">
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js.download')}}" crossorigin="anonymous">
     </script>
     <script src="{{ url_for('static', filename='form-validation.js.download')}}"></script>
     <script src="{{ url_for('static', filename='intlTelInput.js')}}"></script>
     <script src="{{ url_for('static', filename='payment.js')}}"></script>
     <script>
         $(document).ready(function () {
-            $("#change_to_bank").click(function () {
-                $("#card_details").hide();
-                $('#cc-number').attr('required', false);
-                $('#cc-cvv').attr('required', false);
-                $('#cc-expiration').attr('required', false);
-                $('#cc-number').val('');
-                $('#cc-cvv').val('');
-                $('#cc-expiration').val('');
-                // $('#edit-submitted-first-name').removeAttr('required');
-                $("#bank_details").show();
-                $('#routing_number').attr('required', true);
-                $('#acc_number').attr('required', true);
-                $('#acc_number_confirm').attr('required', true);
-            });
-            $("#change_to_card").click(function () {
-                $("#bank_details").hide();
-                $('routing_number').attr('required', false);
-                $('#acc_number').attr('required', false);
-                $('#acc_number_confirm').attr('required', false);
-                $('#routing_number').val('');
-                $('#acc_number').val('');
-                $('#acc_number_confirm').val('');
-                // $('#edit-submitted-first-name').removeAttr('required');
-                $("#card_details").show();
-                $('#cc-number').attr('required', true);
-                $('#cc-cvv').attr('required', true);
-                $('#cc-expiration').attr('required', true);
-            });
+            // $("#change_to_bank").click(function () {
+            //     $("#card_details").hide();
+            //     $('#cc-number').attr('required', false);
+            //     $('#cc-cvv').attr('required', false);
+            //     $('#cc-expiration').attr('required', false);
+            //     $('#cc-number').val('');
+            //     $('#cc-cvv').val('');
+            //     $('#cc-expiration').val('');
+            //     // $('#edit-submitted-first-name').removeAttr('required');
+            //     $("#bank_details").show();
+            //     $('#routing_number').attr('required', true);
+            //     $('#acc_number').attr('required', true);
+            //     $('#acc_number_confirm').attr('required', true);
+            // });
+            // $("#change_to_card").click(function () {
+            //     $("#bank_details").hide();
+            //     $('routing_number').attr('required', false);
+            //     $('#acc_number').attr('required', false);
+            //     $('#acc_number_confirm').attr('required', false);
+            //     $('#routing_number').val('');
+            //     $('#acc_number').val('');
+            //     $('#acc_number_confirm').val('');
+            //     // $('#edit-submitted-first-name').removeAttr('required');
+            //     $("#card_details").show();
+            //     $('#cc-number').attr('required', true);
+            //     $('#cc-cvv').attr('required', true);
+            //     $('#cc-expiration').attr('required', true);
+            // });
         });
+
         // get the country data from the plugin
         var countryData = window.intlTelInputGlobals.getCountryData(),
             input = document.querySelector("#phone"),
@@ -602,9 +599,9 @@
         Payment.formatCardExpiry(exp);
         Payment.formatCardCVC(cvv);
         Payment.restrictNumeric(document.querySelector('#phone'));
-        Payment.restrictNumeric(document.querySelector('#routing_number'));
-        Payment.restrictNumeric(document.querySelector('#acc_number'));
-        Payment.restrictNumeric(document.querySelector('#acc_number_confirm'));
+        // Payment.restrictNumeric(document.querySelector('#routing_number'));
+        // Payment.restrictNumeric(document.querySelector('#acc_number'));
+        // Payment.restrictNumeric(document.querySelector('#acc_number_confirm'));
         // Payment.formatCardCVC(cvc);
 
         var reset = function () {

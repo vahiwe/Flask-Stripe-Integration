@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Afriex</title>
+    <link href="{{ url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" crossorigin="anonymous">
+    <link rel="icon" href="{{ url_for('static', filename='afriex-new-logo-2.png')}}">
+    <meta name="theme-color" content="#563d7c">
+</head>
+
+<body class="bg-light">
+    {% block content %}{% endblock %}
+</body>
+
+</html>
